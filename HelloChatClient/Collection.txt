@@ -1,0 +1,1646 @@
+Q1
+//------------------------CustomerController.java----------------
+package thogaKade.controller;
+
+import java.sql.*;
+import java.util.*; //ArrayList
+import thogaKade.model.*;
+import thogaKade.db.*;
+
+class CustomerController{
+	public static ArrayList<Customer> getAllCustomer()throws SQLException, ClassNotFoundException{
+		String sql="Select * From Customer";
+		Connection conn=DBConnection.getDBConnection().getConnection();
+		Statement stm=conn.createStatement();
+		ResultSet rst=stm.executeQuery(sql);	
+		
+		int count=0;
+		while(rst.next()) count++;
+		
+		Customer[] customerList=new Customer[count];
+		rst.beforeFirst();
+		int i=0;
+		while(rst.next()){
+			Customer customer=new Customer(rst.getString("id"),rst.getString("name"),rst.getString("address"),rst.getDouble("salary"));
+			customerList[i++]=customer;
+		}
+		return customerList;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q2
+//------------------------CustomerController.java----------------
+package thogaKade.controller;
+
+import java.sql.*;
+import java.util.*; //ArrayList
+import thogaKade.model.*;
+import thogaKade.db.*;
+
+class CustomerController{
+	public static ArrayList<Customer> getAllCustomer()throws SQLException, ClassNotFoundException{
+		String sql="Select * From Customer";
+		Connection conn=DBConnection.getDBConnection().getConnection();
+		Statement stm=conn.createStatement();
+		ResultSet rst=stm.executeQuery(sql);	
+		
+		ArrayList<Customer>customerList=new ArrayList<Customer>();
+		while(rst.next()){
+			Customer customer=new Customer(rst.getString("id"),rst.getString("name"),rst.getString("address"),rst.getDouble("salary"));
+			customerList.add(customer);
+		}
+		return customerList;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q3
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		ArrayList ar=new ArrayList();
+		ar.add(new String("B")); //public void add(Object obj)
+		ar.add(new String("D"));
+		ar.add(new String("A"));
+		ar.add(new String("C"));
+		ar.add(new String("E"));
+		
+		String s=(String)ar.get(2); //public Object get(int index)
+		System.out.println("object of index 2 : "+s);
+		
+		for(int i=0;i<ar.size();i++){ //public int size()
+			String s1=(String)ar.get(i);
+			System.out.print(s1+" ");
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q4 Collection Classes with Generics
+===================================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		ArrayList ar=new ArrayList();
+		ar.add(new String("B")); //public void add(Object obj)
+		ar.add(new String("D"));
+		ar.add(new String("A"));
+		ar.add(new Integer(100));
+		ar.add(new String("C"));
+		ar.add(new String("E"));
+
+	
+		for(int i=0;i<ar.size();i++){ //public int size()
+			String s1=(String)ar.get(i);
+			System.out.print(s1+" ");
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q5
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		ArrayList <String>ar=new ArrayList<>();
+		ar.add(new String("B")); //public void add(String obj)
+		ar.add(new String("D"));
+		ar.add(new String("A"));
+		ar.add(new Integer(100)); //Illegal
+		ar.add(new String("C"));
+		ar.add(new String("E"));
+
+	
+		for(int i=0;i<ar.size();i++){ //public int size()
+			//String s1=(String)ar.get(i);
+			String s1=ar.get(i); //public String get(int) ->No need to cast
+			System.out.print(s1+" ");
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q6
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		ArrayList <String>ar1=new ArrayList<>(); //type String
+		ArrayList <Integer>ar2=new ArrayList<>();	//Integer	
+		ArrayList ar3=new ArrayList<>();	//Object
+		ar1.add(new String("A"));
+		ar1.add(new Integer(100)); //Illegal
+
+		ar2.add(new Integer(100)); 	//Legal
+		ar2.add(new String("aa"));	//Illegal
+
+		ar3.add(new Integer(100)); 	//Legal
+		ar3.add(new String("aa"));	//Legal
+		ar3.add(new int[]{33,33});	//Legal		
+		ar3.add(new Scanner(System.in));	//Legal
+		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q7
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		ArrayList <String>ar=new ArrayList<>(); //type String
+		ar.add(new String("C"));
+		ar.add(new String("B"));
+		ar.add(new String("A"));
+		ar.add(new String("E"));
+		ar.add(new String("D"));
+		
+		System.out.println(ar); //ar.toString()
+		
+		ar.add(new String("A"));
+		System.out.println(ar); //
+		
+		String s=new String("G");
+		ar.add(s);
+		ar.add(s);
+		System.out.println(ar); //
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q8 ArrayList with a Custom Class (class Customer)
+=================================================
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q9 From Q8
+==========
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return id+"-"+name;
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q10 Iterations
+==============
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	int salary;
+	Customer(int id, String name, int salary){
+		this.id=id;
+		this.name=name;
+		this.salary=salary;
+	}
+	public String toString(){
+		return ""+salary; 
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala",3000));
+		ar.add(new Customer(1004, "Amarapala",2000));
+		ar.add(new Customer(1003, "Somadasa",1000));
+		ar.add(new Customer(1005, "Somapala",5000));
+		ar.add(new Customer(1001, "Danapala",6000));
+		System.out.println(ar); //ar.toString()
+		
+		//Traditional for-loop
+		for(int i=0;i<ar.size();i++){
+			Customer c=ar.get(i);
+			c.salary*=1.1;
+		}
+		System.out.println(ar); //ar.toString()
+			
+		//for-each loop
+		for(Customer c:ar){
+			c.salary+=1000;
+		}
+		System.out.println(ar); //ar.toString()
+		
+		//Iteration 
+		Iterator <Customer>it=ar.iterator();
+		while(it.hasNext()){ 	//public boolean hasNext()
+			Customer c=it.next(); //public Customer next()
+			c.salary=0;
+		}
+		System.out.println(ar); //ar.toString()
+	}
+}
+ 
+/////////////////////////////////////////////////////////////////////////////////
+Q11 Exercise
+============
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	int salary;
+	Customer(int id, String name, int salary){
+		this.id=id;
+		this.name=name;
+		this.salary=salary;
+	}
+	public String toString(){
+		return ""+salary; 
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar1=new ArrayList<>(); 
+		ArrayList <String>ar2=new ArrayList<>(); 
+		ArrayList ar3=new ArrayList(); 
+		
+		for(Customer c : ar1){
+			//body
+		}
+		for(String s : ar2){
+				
+		}
+		for(Customer c : ar3){} //Illegal
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q12 Methods in Class "ArrayList"
+================================
+boolean 	add(E e)
+void 	add(int index, E element)
+E 	get(int index)
+Iterator<E> 	iterator()
+E 	remove(int index)
+E 	set(int index, E element)
+int 	size()
+Object[] 	toArray()
+<T> T[] 	toArray(T[] a)
+boolean 	isEmpty()
+
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return id+"-"+name;
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+		
+		ar.add(2,new Customer(1007, "Somasiri"));
+		System.out.println(ar); //ar.toString()
+		
+		//ar.add(8,new Customer(1007, "Somasiri")); //Runtime Error
+		ar.remove(2);
+		System.out.println(ar); //ar.toString()
+		
+		ar.set(1,new Customer(1008,"Amarasiri"));
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+Q13 Methods in Class "ArrayList"
+================================
+boolean 	contains(Object o)
+int 	indexOf(Object o)
+boolean 	remove(Object o)
+
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return id+"-"+name;
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+		
+		System.out.println("Somadasa is exists : "+ar.contains(new Customer(1003,"Somadasa"));
+		
+		ar.remove(new Customer(1005, "Somapala"));
+		System.out.println(ar); //ar.toString()
+	
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q14 From Q13
+============
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return id+"-"+name;
+	}
+	public boolean equals(Object ob){
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+		
+		System.out.println("Somadasa is exists : "+ar.contains(new Customer(1003,"Somadasa")));
+		
+		ar.remove(new Customer(1005, "Somapala"));
+		System.out.println(ar); //ar.toString()
+	
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q15	LinkedList
+==============
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return name;
+	}
+	public boolean equals(Object ob){
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		LinkedList <Customer>ar=new LinkedList<>(); 
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+		
+		ar.addFirst(new Customer(1006, "Danasiri"));
+		ar.addLast(new Customer(1008, "Amaradasa"));
+		System.out.println(ar); //ar.toString()
+		
+		ar.removeFirst();
+		ar.removeLast();
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q16 Vector same as ArrayList (Methods of class Vector are sychronized)
+============================= ========================================
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return name;
+	}
+	public boolean equals(Object ob){
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		Vector <Customer>ar=new Vector<>(); 
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+	Set Classes (HashSet, LinkedHashSet, TreeSet)
+/////////////////////////////////////////////////////////////////////////////////
+Q17
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		HashSet <String>hs=new HashSet<>();
+		hs.add(new String("G"));
+		hs.add(new String("B"));
+		hs.add(new String("S"));
+		hs.add(new String("P"));
+		hs.add(new String("W"));
+		hs.add(new String("F"));
+		System.out.println(hs); //No order
+		
+		hs.add(new String("S"));//
+		System.out.println(hs); //
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q18 LinkedHashSet (Insertion Order set)
+=======================================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		HashSet <String>hs=new LinkedHashSet<>();
+		hs.add(new String("G"));
+		hs.add(new String("B"));
+		hs.add(new String("S"));
+		hs.add(new String("P"));
+		hs.add(new String("W"));
+		hs.add(new String("F"));
+		System.out.println(hs); //Insertion Order
+		
+		hs.add(new String("S"));//
+		System.out.println(hs); //
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q19 TreeSet (Sorted Set)
+========================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		TreeSet <String>hs=new TreeSet<>();
+		hs.add(new String("G"));
+		hs.add(new String("B"));
+		hs.add(new String("S"));
+		hs.add(new String("P"));
+		hs.add(new String("W"));
+		hs.add(new String("F"));
+		System.out.println(hs); //Sorted Set
+				
+		hs.add(new String("S"));//
+		System.out.println(hs); //
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q20 No Random Accessing
+=======================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		HashSet <String>hs=new HashSet<>();
+		hs.add(new String("G"));
+		hs.add(new String("B"));
+		hs.add(new String("S"));
+		hs.add(new String("P"));
+		hs.add(new String("W"));
+		hs.add(new String("F"));
+		System.out.println(hs);
+		
+		String s=hs.get(2); //Illegal
+				
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q21 Iterating
+=============
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		HashSet <String>hs=new HashSet<>();
+		hs.add(new String("G"));
+		hs.add(new String("B"));
+		hs.add(new String("S"));
+		hs.add(new String("P"));
+		hs.add(new String("W"));
+		hs.add(new String("F"));
+		System.out.println(hs);
+		
+		for(String s : hs){
+			System.out.print(s+" ");
+		}
+		System.out.println();
+		
+		Iterator <String>it=hs.iterator();
+		while(it.hasNext()){
+			String s=it.next();
+			System.out.print(s+" ");
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q22 Methods in class HashSet
+============================
+
+boolean 	add(E e)
+boolean 	contains(Object o)
+boolean 	remove(Object o)
+int 	size()
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+Q23 Set Classes with a Custom Class (Customer)
+==============================================
+import java.util.*;
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public boolean equals(Object ob){
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		HashSet <Customer>hs=new HashSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001));
+		System.out.println(hs);
+
+		hs.add(new Customer(1001));
+		System.out.println(hs);		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q24 From Q23
+============
+import java.util.*;
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		HashSet <Customer>hs=new HashSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001));
+		System.out.println(hs);
+
+		hs.add(new Customer(1001));
+		System.out.println(hs);		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q25 Overriding hashCode and method equals(Object)
+=================================================
+import java.util.*;
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		HashSet <Customer>hs=new HashSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001));
+		System.out.println(hs);
+
+		hs.add(new Customer(1001));
+		System.out.println(hs);		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q26 Exercise (Wrong hashCode contract)
+============ =========================
+import java.util.*;
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		Random r=new Random();
+		return id *r.nextInt(1000) ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		HashSet <Customer>hs=new HashSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001));
+		System.out.println(hs);
+
+		hs.add(new Customer(1001));
+		System.out.println(hs);		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q27 Exercise
+============
+import java.util.*;
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return name.hashCode();
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		HashSet <Customer>hs=new HashSet<>();
+		hs.add(new Customer(1005,"E"));
+		hs.add(new Customer(1002,"B"));
+		hs.add(new Customer(1001,"A"));
+		hs.add(new Customer(1004,"D"));	
+		hs.add(new Customer(1003,"C"));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001,"X"));
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q28 Exercise
+============
+import java.util.*;
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return name.hashCode();
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return name.equals(c.name);
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		HashSet <Customer>hs=new HashSet<>();
+		hs.add(new Customer(1005,"E"));
+		hs.add(new Customer(1002,"B"));
+		hs.add(new Customer(1001,"A"));
+		hs.add(new Customer(1004,"D"));	
+		hs.add(new Customer(1003,"C"));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001,"B"));
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q29 LinkedHashSet (Insertion Order)
+===================================
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		LinkedHashSet <Customer>hs=new LinkedHashSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q30 TreeSet - SortedSet (Runtime Error )  ?
+============= =============================
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>hs=new TreeSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q31 Comparable Customer
+=======================
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		if(this.id>c.id){
+			return 1;
+		}else if(this.id<c.id){
+			return -1;
+		}else{
+			return 0;
+		}
+		
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>hs=new TreeSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q32 Exercise (From Q31)
+=======================
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		if(this.id<c.id){
+			return 1;
+		}else if(this.id>c.id){
+			return -1;
+		}else{
+			return 0;
+		}
+		
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>hs=new TreeSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q33 Exercise
+============
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		return 0;
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>hs=new TreeSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q34 Exercise
+============
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		if(this.id>c.id){
+			return 1;
+		}else if(this.id<c.id){
+			return -1;
+		}else{
+			return 0;
+		}
+	}
+	/*public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+	*/
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>hs=new TreeSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001));
+		System.out.println(hs);
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////// 
+Q35 Exercise
+============
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		if(this.id>c.id){
+			return 1;
+		}else {
+			return -1;
+		}
+	}
+	/*public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+	*/
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>hs=new TreeSet<>();
+		hs.add(new Customer(1005));
+		hs.add(new Customer(1002));
+		hs.add(new Customer(1001));
+		hs.add(new Customer(1004));	
+		hs.add(new Customer(1003));
+		
+		System.out.println(hs);
+		
+		hs.add(new Customer(1001));
+		System.out.println(hs);
+		
+		hs.add(new Customer(1006));	
+		System.out.println(hs);
+
+		hs.add(new Customer(1006));	
+		System.out.println(hs);		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q36 Methods in class TreeSet
+============================
+E 	first()
+E 	last();
+
+e 	ceiling(E e)
+E 	higher(E e)
+
+E 	lower(E e)
+E 	floor(E e)
+
+E 	pollFirst()
+E 	pollLast()
+
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		if(this.id>c.id){
+			return 1;
+		}else if(this.id<c.id){
+			return -1;
+		}else{
+			return 0;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>ts=new TreeSet<>();
+		ts.add(new Customer(1005));
+		ts.add(new Customer(1002));
+		ts.add(new Customer(1001));
+		ts.add(new Customer(1004));
+		ts.add(new Customer(1008));
+		ts.add(new Customer(1009));	
+		ts.add(new Customer(1001));
+		
+		System.out.println("ceiling 1005 : "+ts.ceiling(new Customer(1005)));
+		System.out.println("higher  1005 : "+ts.higher(new Customer(1005)));
+
+		System.out.println("ceiling 1006 : "+ts.ceiling(new Customer(1006)));
+		System.out.println("higher  1006 : "+ts.higher(new Customer(1006)));		
+		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q37 Interface "Comparator" (Customer Sorting)
+========================== ==================
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+}
+class MyComparator implements Comparator<Customer>{
+	public int compare(Customer c1, Customer c2){
+		if(c1.id>c2.id){
+			return 1;
+		}else if(c1.id<c2.id){
+			return -1;
+		}else{
+			return 0;
+		}
+	}
+	
+}
+class Demo{
+	public static void main(String args[]){
+		TreeSet <Customer>ts=new TreeSet<>(new MyComparator());
+		ts.add(new Customer(1005));
+		ts.add(new Customer(1002));
+		ts.add(new Customer(1001));
+		ts.add(new Customer(1004));
+		ts.add(new Customer(1008));
+		ts.add(new Customer(1009));	
+		ts.add(new Customer(1001));
+		
+		System.out.println(ts);	
+		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+	Map Classes [HashMap, LinkedHshMap, TreeMap, Hashtable]
+/////////////////////////////////////////////////////////////////////////////////
+Q38 HashMap
+===========
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}	
+}
+class Demo{
+	public static void main(String args[]){
+		HashMap <String,Customer>hm=new HashMap<>();
+		hm.put("F",new Customer(1005)); //put(Key, Value)->Key any java Object, Value->Object
+		hm.put("A",new Customer(1001));
+		hm.put("C",new Customer(1003));
+		hm.put("E",new Customer(1006));
+		hm.put("B",new Customer(1002));
+		hm.put("D",new Customer(1004));
+
+		System.out.println(hm);	
+		
+		Customer c1=hm.get("C");
+		System.out.println("C : "+c1);	
+		
+		hm.remove("C");
+		System.out.println(hm);	
+		
+		System.out.println("Contains D	  : "+hm.containsKey("D"));	
+		System.out.println("Contains 1001 : "+hm.containsValue(new Customer(1001)));	 //false
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q39 LinkedHashMap (Keys are in insertion order)
+===============================================
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}	
+}
+class Demo{
+	public static void main(String args[]){
+		HashMap <String,Customer>hm=new LinkedHashMap<>();
+		hm.put("F",new Customer(1005)); //put(Key, Value)->Key any java Object, Value->Object
+		hm.put("A",new Customer(1001));
+		hm.put("C",new Customer(1003));
+		hm.put("E",new Customer(1006));
+		hm.put("B",new Customer(1002));
+		hm.put("D",new Customer(1004));
+
+		System.out.println(hm);	
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q40 TreeMap (Keys area sorted)
+=========== ==================
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}	
+}
+class Demo{
+	public static void main(String args[]){
+		TreeMap <String,Customer>hm=new TreeMap<>();
+		hm.put("F",new Customer(1005)); //put(Key, Value)->Key any java Object, Value->Object
+		hm.put("A",new Customer(1001));
+		hm.put("C",new Customer(1003));
+		hm.put("E",new Customer(1006));
+		hm.put("B",new Customer(1002));
+		hm.put("D",new Customer(1004));
+
+		System.out.println(hm);	
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q41 class PriorityQueue
+=======================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		PriorityQueue <String>pq=new PriorityQueue<>();
+		pq.add("G");
+		pq.add("J");
+		pq.add("W");
+		pq.add("Z");
+		pq.add("K");
+		pq.add("P");
+		pq.add("A");
+		System.out.println(pq);	
+		
+		
+		pq.remove();
+		System.out.println(pq);	
+
+		pq.remove();
+		System.out.println(pq);			
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q42 PriorityQueue (Runtime Error)
+================= ===============
+import java.util.*;
+class Customer{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int hashCode(){
+		System.out.println("method hashCode "+id);
+		return id  ;
+	}
+	public boolean equals(Object ob){
+		System.out.println("method equals "+id);
+		if(ob instanceof Customer){
+			Customer c=(Customer)ob;
+			return this.id==c.id;
+		}else{
+			return false;
+		}
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		PriorityQueue	<Customer>pq=new PriorityQueue<>();
+		pq.add(new Customer(1005));
+		pq.add(new Customer(1002));
+		pq.add(new Customer(1001));
+		pq.add(new Customer(1004));	
+		pq.add(new Customer(1003));
+		
+		System.out.println(pq);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q43 From Q42 (Comparable Customer)
+============ ======================
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	Customer(int id){
+		this.id=id;
+	}
+	public String toString(){
+		return Integer.toString(id);
+	}
+	public int compareTo(Customer c){
+		if(this.id>c.id){
+			return 1;
+		}else if(this.id<c.id){
+			return -1;
+		}else{
+			return 0;
+		}
+	}	
+}
+class Demo{
+	public static void main(String args[]){
+		PriorityQueue	<Customer>pq=new PriorityQueue<>();
+		pq.add(new Customer(1005));
+		pq.add(new Customer(1002));
+		pq.add(new Customer(1001));
+		pq.add(new Customer(1004));	
+		pq.add(new Customer(1003));
+		
+		System.out.println(pq);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q44 Class "Arrays"
+==================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		//Arrays a1=new Arrays();
+		
+		int[] xr={45,34,56,67,87,23,75,24,76,35};
+		String list=Arrays.toString(xr);
+		System.out.println(list);
+		
+		Arrays.sort(xr);
+		System.out.println(Arrays.toString(xr));
+		
+		int index=Arrays.binarySearch(xr, 75);
+		System.out.println("Index of 75 : "+index);
+
+		index=Arrays.binarySearch(xr, 100);
+		System.out.println("Index of 100: "+index);		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q45 Class Collections
+=====================
+import java.util.*;
+class Demo{
+	public static void main(String args[]){
+		ArrayList <String>ar=new ArrayList<>(); //type String
+		ar.add(new String("C"));
+		ar.add(new String("B"));
+		ar.add(new String("A"));
+		ar.add(new String("E"));
+		ar.add(new String("D"));
+		System.out.println(ar); //ar.toString()
+		
+		Collections.sort(ar);
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q46 Compile Error
+=================
+import java.util.*;
+class Customer{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return id+"-"+name;
+	}
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+		
+		Collections.sort(ar);	//Error
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+Q47 From Q46
+============
+import java.util.*;
+class Customer implements Comparable<Customer>{
+	int id;
+	String name;
+	Customer(int id, String name){
+		this.id=id;
+		this.name=name;
+	}
+	public String toString(){
+		return id+"-"+name;
+	}
+	public int compareTo(Customer c){
+		if(this.id>c.id){
+			return 1;
+		}else if(this.id<c.id){
+			return -1;
+		}else{
+			return 0;
+		}
+	}		
+}
+class Demo{
+	public static void main(String args[]){
+		ArrayList <Customer>ar=new ArrayList<>(); //type Customer
+		ar.add(new Customer(1002, "Gunapala"));
+		ar.add(new Customer(1004, "Amarapala"));
+		ar.add(new Customer(1003, "Somadasa"));
+		ar.add(new Customer(1005, "Somapala"));
+		ar.add(new Customer(1001, "Danapala"));
+		System.out.println(ar); //ar.toString()
+		
+		Collections.sort(ar);	//Error
+		System.out.println(ar); //ar.toString()
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+	END.
+////////////////////////////////////////////////////////////////////////////////
